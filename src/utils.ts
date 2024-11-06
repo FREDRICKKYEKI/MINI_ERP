@@ -1,7 +1,9 @@
+import { membershipPlanType } from "./types";
+
 /**
  * @description Membership plans
  */
-export const membershipPlans = [
+export const membershipPlans: membershipPlanType[] = [
   {
     name: "Free",
     price: 0,
@@ -13,12 +15,12 @@ export const membershipPlans = [
   },
   {
     name: "Pro",
-    price: 20,
+    price: 2500,
     includes: ["All features in Free plan", "Priority support"],
   },
   {
     name: "Enterprise",
-    price: 50,
+    price: 5000,
     includes: ["All features in Pro plan", "1:1 mentorship"],
   },
 ];

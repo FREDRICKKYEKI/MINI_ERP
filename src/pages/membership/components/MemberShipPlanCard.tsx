@@ -1,11 +1,8 @@
 import { FC } from "react";
+import { membershipPlanType } from "../../../types";
 
 interface MemberShipPlanCardProps {
-  plan: {
-    name: string;
-    price: number;
-    includes: string[];
-  };
+  plan: membershipPlanType;
 }
 export const MemberShipPlanCard: FC<MemberShipPlanCardProps> = ({ plan }) => {
   return (
@@ -20,20 +17,7 @@ export const MemberShipPlanCard: FC<MemberShipPlanCardProps> = ({ plan }) => {
         <ul className="mt-4">
           {plan.includes.map((feature, index) => (
             <li key={index} className="flex items-center text-gray-500">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4 mr-1"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
+              <TickSVG />
               {feature}
             </li>
           ))}
@@ -42,3 +26,20 @@ export const MemberShipPlanCard: FC<MemberShipPlanCardProps> = ({ plan }) => {
     </div>
   );
 };
+
+const TickSVG = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-4 w-4 mr-1"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M5 13l4 4L19 7"
+    />
+  </svg>
+);
