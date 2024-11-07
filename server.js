@@ -7,8 +7,6 @@ import logger from "./logger.js";
 configDotenv({ path: "BACKEND.ENV" });
 // ========================================================
 
-// ngrok url
-const ngrok_url = "https://d7f6-80-240-201-175.ngrok-free.app";
 const MODE = process.env.MODE;
 
 // Constants
@@ -26,6 +24,12 @@ const ssrManifest = isProduction
 
 // Create http server
 const app = express();
+
+// ========================= Middlewares ======================
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static("public"));
+// ==========================================================
 
 // Add Vite or respective production middlewares
 let vite;

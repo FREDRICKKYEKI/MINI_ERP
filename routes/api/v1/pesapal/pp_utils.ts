@@ -39,3 +39,23 @@ export const getAccessToken = async (params: paramsType) => {
       });
   });
 };
+
+/**
+ * @description Get IPN URL
+ * @param path - the to the callback route e.g `/pesapal/callback`
+ * - Must start with `/`
+ * @returns
+ */
+export const getIPNUrl = (path: string) => {
+  const IPN_BASE_URL: string | undefined = process.env.IPN_BASE_URL;
+  const API_VERSION: string | undefined = process.env.API_VERSION;
+
+  // the envs must be defined!!!
+  if (!IPN_BASE_URL) {
+    throw new Error("IPN_BASE_URL is not defined");
+  } else if (!API_VERSION) {
+    throw new Error("API_VERSION is not defined");
+  }
+
+  return `${IPN_BASE_URL}/api/${API_VERSION}${path}`;
+};

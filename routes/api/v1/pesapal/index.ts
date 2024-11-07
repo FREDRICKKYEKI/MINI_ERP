@@ -2,7 +2,7 @@
  * @description - This file contains the routes related to PesaPal especially the protected ones
  */
 import express from "express";
-import { getAccessToken } from "./pp_utils";
+import { getAccessToken, getIPNUrl } from "./pp_utils";
 import { tokenType } from "../../../../types";
 import pkg_logger from "../../../../logger";
 
@@ -15,8 +15,8 @@ const router = express.Router();
 // Environment variables
 const {
   MODE,
-  PESAPAL_DEMO_URL,
-  PESAPAL_PROD_URL,
+  PESAPAL_REQ_TOKEN_DEMO_URL,
+  PESAPAL_REQ_TOKEN_PROD_URL,
   PROD_PESAPAL_consumer_secret,
   PROD_PESAPAL_consumer_key,
   DEV_PESAPAL_consumer_key,
@@ -32,8 +32,8 @@ let REG_IPN_URL: string;
 
 // Check if environment variables are set
 if (
-  !PESAPAL_DEMO_URL ||
-  !PESAPAL_PROD_URL ||
+  !PESAPAL_REQ_TOKEN_DEMO_URL ||
+  !PESAPAL_REQ_TOKEN_PROD_URL ||
   !PROD_PESAPAL_consumer_key ||
   !PROD_PESAPAL_consumer_secret ||
   !DEV_PESAPAL_consumer_key ||
@@ -46,12 +46,12 @@ if (
 
 // Set environment variables
 if (MODE === "DEV") {
-  PESAPAL_URL = PESAPAL_DEMO_URL;
+  PESAPAL_URL = PESAPAL_REQ_TOKEN_DEMO_URL;
   consumer_key = DEV_PESAPAL_consumer_key;
   consumer_secret = DEV_PESAPAL_consumer_secret;
   REG_IPN_URL = PESAPAL_REG_IPN_DEMO_URL;
 } else {
-  PESAPAL_URL = PESAPAL_PROD_URL;
+  PESAPAL_URL = PESAPAL_REQ_TOKEN_PROD_URL;
   consumer_key = PROD_PESAPAL_consumer_key;
   consumer_secret = PROD_PESAPAL_consumer_secret;
   REG_IPN_URL = PESAPAL_REG_IPN_PROD_URL;
@@ -123,55 +123,74 @@ const getToken = async () => {
 };
 // endregion
 
+// region registerIPN
+/**
+ * @description: Registers an IPN to PesaPal
+ * @param withToken - whether to return the token or not
+ * @returns
+ */
+export function registerIPN(withToken = false) {
+  return new Promise((resolve, reject) => {
+    getToken()
+      .then((data) => {
+        const token: string = data as string;
+
+        // headers
+        const headers = {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        };
+
+        // ================= register IPN ==========================
+        fetch(REG_IPN_URL, {
+          method: "POST",
+          headers,
+          body: JSON.stringify({
+            url: getIPNUrl("/pesapal/callback"),
+            ipn_notification_type: "POST",
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            logger.info("IPN registration successful!");
+            if (withToken) {
+              resolve({ token, ...data });
+            }
+            resolve(data);
+          })
+          .catch((err) => {
+            logger.error("Error", err);
+            reject({ message: "Error registering IPN" });
+          });
+        // ========================================================
+      })
+      .catch((err) => {
+        logger.error("Error", err);
+        reject({ message: "Error getting token" });
+      });
+  });
+}
+// endregion
+
 // region /RegisterIPN
+// =============================================================================
 /**
  * @description Register IPN
  * @param req - Request
  * @param res - Response
  */
-// =============================================================================
 router.get("/register_ipn", (req, res) => {
   logger.info("IPN registration hit");
-  getToken()
+  registerIPN()
     .then((data) => {
-      const token: string = data as string;
-
-      // headers
-      const headers = {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      };
-
-      // ================= register IPN ==========================
-      fetch(REG_IPN_URL, {
-        method: "POST",
-        headers,
-        body: JSON.stringify({
-          url: "https://d7f6-80-240-201-175.ngrok-free.app/pesapal/callback",
-          ipn_notification_type: "POST",
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          logger.info("IPN registration successful!");
-          res.json(data);
-        })
-        .catch((err) => {
-          logger.error("Error", err);
-          res.status(500).json({ message: "Error registering IPN" });
-        });
-      // ========================================================
+      res.json(data);
     })
     .catch((err) => {
-      logger.error("Error", err);
-      res.status(500).json({ message: "Error getting token" });
+      res.status(500).json(err);
     });
 });
 // =============================================================================
 // endregion
 
-// region /submitOrderRequest
-// TODO: Implement this route
-// router.post("/submit_order_request", (req, res) => {
 export default router;

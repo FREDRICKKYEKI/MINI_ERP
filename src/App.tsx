@@ -19,6 +19,7 @@ export default App;
 export const routes = {
   home: "/",
   chooseMembership: "/plans",
+  api: (endpoint: string) => `/api/v1/${endpoint}`, //FIXME: the version should be dynamic and not hardcoded
 };
 // =====================================================================
 // endregion routes

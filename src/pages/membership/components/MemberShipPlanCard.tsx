@@ -1,16 +1,28 @@
 import { FC } from "react";
 import { membershipPlanType } from "../../../types";
+import { routes } from "../../../App";
 
 interface MemberShipPlanCardProps {
   plan: membershipPlanType;
 }
 export const MemberShipPlanCard: FC<MemberShipPlanCardProps> = ({ plan }) => {
   return (
-    <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 p-4 flex">
+    <form
+      className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 p-4 flex"
+      method="POST"
+      action={routes.api("submitOrder/register_membership")}
+    >
+      {/* TODO: Add more hidden params */}
       <div className="bg-white p-4 rounded-lg shadow flex-grow h-full flex flex-col">
         <h2 className="text-xl font-bold">{plan.name}</h2>
-        <p className="text-gray-500">${plan.price}</p>
-        <button className="bg-blue-500 text-white px-4 py-2 mt-4 rounded w-full">
+        <input type="hidden" name="type" value={plan.name} />
+        <p className="text-gray-500">KSH {plan.price}</p>
+        <input type="hidden" name="price" value={plan.price} />
+
+        <button
+          className="bg-blue-500 text-white px-4 py-2 mt-4 rounded w-full"
+          type="submit"
+        >
           Choose
         </button>
         {/* features */}
@@ -23,7 +35,7 @@ export const MemberShipPlanCard: FC<MemberShipPlanCardProps> = ({ plan }) => {
           ))}
         </ul>
       </div>
-    </div>
+    </form>
   );
 };
 
