@@ -1,5 +1,5 @@
 import express from "express";
-import pkg_logger from "../../logger";
+import pkg_logger from "../../../../logger";
 
 const logger = pkg_logger;
 const router = express.Router();

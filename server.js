@@ -57,14 +57,13 @@ if (!MODE) {
 
 logger.info(`MODE: ${MODE}`);
 
-// ========================= import routes ======================
-const registerPesaPal = await vite.ssrLoadModule(
-  "/routes/pesapal/registerPesaPal.ts"
-);
+// ========================= api entrypoint ======================
+const apiEntryPoint = await vite.ssrLoadModule("/routes/apiEntryPoint.ts");
 // ==============================================================
 
 // register routes
-app.use("/pesapal", registerPesaPal.default);
+// protected routes TODO: add authentication middleware
+app.use("/api", apiEntryPoint.default);
 
 // Serve HTML
 app.use("*all", async (req, res) => {
