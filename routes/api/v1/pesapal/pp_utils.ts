@@ -1,8 +1,13 @@
+import pkg_logger from "../../../../logger";
+
+const logger = pkg_logger;
+
 type paramsType = {
   url: string;
   consumer_key: string;
   consumer_secret: string;
 };
+const { MODE } = process.env;
 /**
  * @description Get access token
  * @param params - url, consumer_key, consumer_secret

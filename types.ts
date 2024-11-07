@@ -20,3 +20,11 @@ export interface IPNRegResponseType {
   message: string;
   token?: string;
 }
+
+export interface SubmitOrderResponseType {
+  order_tracking_id: string;
+  merchant_reference: string;
+  redirect_url: string;
+  error: string | null;
+  status: string;
+}

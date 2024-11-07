@@ -4,7 +4,7 @@
 import express from "express";
 import { registerIPN } from ".";
 import expressAsyncHandler from "express-async-handler";
-import { IPNRegResponseType } from "../../../../types";
+import { IPNRegResponseType, SubmitOrderResponseType } from "../../../../types";
 import pkg_logger from "../../../../logger";
 import { log } from "console";
 
@@ -67,7 +67,7 @@ router.post(
         // amount: MODE === "DEV" ? 1 : price, //TODO: uncomment this line For production
         amount: 1, //TODO: remove this line For production
         description: "Membership registration",
-        callback_url: IPN_BASE_URL + "success?type=membership",
+        callback_url: IPN_BASE_URL + "/success?type=membership",
         redirect_mode: "",
         notification_id: ipn_id,
         branch: "MINI ERP", // TODO: create a branch name for this transaction
@@ -112,7 +112,7 @@ router.post(
               .json({ message: "Internal server error", error: data.error });
           } else {
             logger.info("Submit order successful");
-            res.json(data);
+            res.redirect((data as SubmitOrderResponseType).redirect_url);
           }
         })
         .catch((err) => {
@@ -126,4 +126,10 @@ router.post(
   })
 );
 // endregion
+
+/** TODO:
+ * 1. Don't forget to change the IPN_BASE_URL when you run ngrok
+ * 2. Fix submitOrder to prompt user to pay the correct amount
+ * */
+
 export default router;

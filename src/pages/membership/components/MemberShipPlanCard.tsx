@@ -8,7 +8,7 @@ interface MemberShipPlanCardProps {
 export const MemberShipPlanCard: FC<MemberShipPlanCardProps> = ({ plan }) => {
   return (
     <form
-      className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 p-4 flex"
+      className="p-2 flex"
       method="POST"
       action={routes.api("submitOrder/register_membership")}
     >
