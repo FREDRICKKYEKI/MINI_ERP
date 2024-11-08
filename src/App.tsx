@@ -5,10 +5,9 @@ import ChooseMembership from "./pages/membership/ChooseMembership";
 import SuccessPage from "./pages/success/SuccessPage";
 import LogIn from "./pages/auth/LogIn";
 import SignUp from "./pages/auth/SignUp";
-interface AppProps {
-  isAuth: boolean;
-}
-function App({ isAuth }: AppProps) {
+import Dashboard from "./pages/dashboard/Dashboard";
+
+function App() {
   return (
     <Routes>
       <Route path={routes.home} element={<Home />} />
@@ -17,6 +16,7 @@ function App({ isAuth }: AppProps) {
       <Route path={routes.logIn} element={<LogIn />} />
       <Route path={routes.signUp} element={<SignUp />} />
       <Route path="*" element={<div>404</div>} />
+      <Route path={routes.dashboard} element={<Dashboard />} />
     </Routes>
   );
 }
@@ -31,6 +31,7 @@ export const routes = {
   success: "/success",
   logIn: "/login",
   signUp: "/signup",
+  dashboard: "/dashboard",
   api: (endpoint: string) => `/api/v1/${endpoint}`, //FIXME: the version should be dynamic and not hardcoded
 };
 // =====================================================================
