@@ -5,8 +5,10 @@ import ChooseMembership from "./pages/membership/ChooseMembership";
 import SuccessPage from "./pages/success/SuccessPage";
 import LogIn from "./pages/auth/LogIn";
 import SignUp from "./pages/auth/SignUp";
-
-function App() {
+interface AppProps {
+  isAuth: boolean;
+}
+function App({ isAuth }: AppProps) {
   return (
     <Routes>
       <Route path={routes.home} element={<Home />} />

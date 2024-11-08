@@ -10,7 +10,7 @@ let db;
 if (MODE === "DEV") {
   db = new Sequelize({
     dialect: "sqlite",
-    storage: "../dev_db.db",
+    storage: "dev_db.db",
   });
 } else if (MODE === "PROD") {
   throw new Error("PROD mode db connection not implemented yet");
@@ -25,4 +25,13 @@ db.authenticate()
     logger.error("Unable to connect to the database:", err);
   });
 
+// Query to list tables in SQLite database
+db.query("SELECT name FROM sqlite_master WHERE type='table';")
+  .then((result) => {
+    const tables = result[0]; // SQLite query result is in the first element of the array
+    logger.info("Tables in the database:", tables);
+  })
+  .catch((err) => {
+    logger.error("Error fetching tables:", err);
+  });
 export default db;

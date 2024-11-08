@@ -1,7 +1,16 @@
 import { Link } from "react-router-dom";
 import { routes } from "../../App";
+import { useEffect } from "react";
 
 const SignUp = () => {
+  useEffect(() => {
+    // get url param
+    const urlParams = new URLSearchParams(window.location.search);
+    const error = urlParams.get("error");
+    if (error) {
+      alert(error);
+    }
+  }, []);
   const handleSignUp = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
@@ -104,7 +113,8 @@ const SignUp = () => {
               />
             </div>
 
-            {/* role */}
+            {/* region role */}
+            {/* FIXME: These should come from the backend */}
             <div className="mb-4">
               <label
                 className="block text-gray-600 font-semibold mb-2"
@@ -117,8 +127,8 @@ const SignUp = () => {
                 name="role"
                 className="w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option value="member">Member</option>
-                <option value="admin">Admin</option>
+                <option value="1">Admin</option>
+                <option value="2">Member</option>
               </select>
             </div>
 

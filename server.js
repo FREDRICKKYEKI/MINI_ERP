@@ -3,6 +3,7 @@ import express from "express";
 import { configDotenv } from "dotenv";
 // import registerPesaPal from "./routes/pesapal/registerPesaPal.js";
 import logger from "./logger.js";
+import cookieParser from "cookie-parser";
 // ================== load env variables ==================
 configDotenv({ path: "BACKEND.ENV" });
 // ========================================================
@@ -26,6 +27,7 @@ const ssrManifest = isProduction
 const app = express();
 
 // ========================= Middlewares ======================
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
@@ -63,15 +65,17 @@ logger.info(`MODE: ${MODE}`);
 
 // ========================= api entrypoint ======================
 const apiEntryPoint = await vite.ssrLoadModule("/routes/apiEntryPoint.ts");
+const utils = await vite.ssrLoadModule("/routes/utils.ts");
+const checkAuth = utils.checkAuth;
 // ==============================================================
 
 // register routes
-// protected routes TODO: add authentication middleware
 app.use("/api", apiEntryPoint.default);
 
 // Serve HTML
 app.use("*all", async (req, res) => {
   try {
+    const isAuthenticated = await checkAuth(req);
     const url = req.originalUrl.replace(base, "");
 
     let template;
@@ -86,11 +90,16 @@ app.use("*all", async (req, res) => {
       render = (await import("./dist/server/entry-server.js")).render;
     }
 
-    const rendered = await render(req.originalUrl, ssrManifest);
+    const rendered = await render(
+      req.originalUrl,
+      ssrManifest,
+      isAuthenticated
+    );
 
     const html = template
       .replace(`<!--app-head-->`, rendered.head ?? "")
-      .replace(`<!--app-html-->`, rendered.html ?? "");
+      .replace(`<!--app-html-->`, rendered.html ?? "")
+      .replace(`<!--app-script-->`, rendered.script ?? "");
 
     res.status(200).set({ "Content-Type": "text/html" }).send(html);
   } catch (e) {
