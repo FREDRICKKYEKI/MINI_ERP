@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS transactions (
     user_id INT NOT NULL,
     amount DECIMAL(10, 2) NOT NULL,
     transaction_type TEXT CHECK(transaction_type IN ('subscription', 'contribution')) NOT NULL,
-    transaction_date DATE NOT NULL,
+    transaction_date DATE NOT NULL DEFAULT CURRENT_DATE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id)
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS subscriptions (
     transaction_id INT UNIQUE NOT NULL,
     start_date DATE NOT NULL,
     expiry_date DATE NOT NULL,
-    status TEXT CHECK(status IN ('active', 'expired')) NOT NULL,
+    status TEXT CHECK(status IN ('active', 'expired')) NOT NULL DEFAULT 'active',
     FOREIGN KEY (transaction_id) REFERENCES transactions(id)
 );
 
@@ -56,13 +56,8 @@ CREATE TABLE IF NOT EXISTS contributions (
     purpose VARCHAR(255),
     FOREIGN KEY (transaction_id) REFERENCES transactions(id)
 );
-
+-- insert the main roles into the roles table
 INSERT INTO roles (role_name, description) VALUES
     ('admin', 'Administrator role'),
     ('member', 'Standard member role');
 
-
--- Optional: Insert test user data (for testing purposes)
-INSERT INTO users (id, name, email, phone, role_id) VALUES
-    ('sdcs-vsdvs-sdvsdvr-34g3rem', 'Alice Doe', 'alice@example.com', '1234567890', 1),
-    ('swg34-234fg-234g34v-34gv3b4', 'Bob Smith', 'bob@example.com', '0987654321', 2);

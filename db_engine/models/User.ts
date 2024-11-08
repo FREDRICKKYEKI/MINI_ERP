@@ -28,21 +28,20 @@ interface UserAttributes {
   updated_at?: Date;
 }
 
-class User extends Model<UserAttributes> implements UserAttributes {
-  //   public id!: string;
-  public name!: string;
-  public email!: string;
-  //   public phone?: string;
-  public password!: string;
-  //   public role_id?: number;
-  //   public created_at!: Date;
-  //   public updated_at!: Date;
-  // compare password method
+class User extends Model<UserAttributes> {
+  /**
+   * @description: Compares the password with the hashed password
+   * @param password
+   * @returns boolean
+   */
   public comparePassword(password: string): boolean {
     return bcrypt.compareSync(password, this.getDataValue("password"));
   }
 
-  // generate token method
+  /**
+   * @description: Generates a JWT token
+   * @returns a JWT token
+   */
   public generateToken(): string {
     return jwt.sign(
       {
@@ -111,7 +110,7 @@ User.init(
         );
       },
       beforeUpdate: async (user) => {
-        if (user.changed("password")) {
+        if (user.getDataValue("password")) {
           const salt = await bcrypt.genSalt(parseInt(PWD_SALT_ROUNDS));
 
           user.setDataValue(

@@ -6,34 +6,12 @@ import { registerIPN } from ".";
 import expressAsyncHandler from "express-async-handler";
 import { IPNRegResponseType, SubmitOrderResponseType } from "../../../../types";
 import pkg_logger from "../../../../logger";
-import { log } from "console";
+import { PESAPAL_SUBMIT_ORDER_URL } from "./pp_utils";
 
 const router = express.Router();
 const logger = pkg_logger;
 
-const {
-  MODE,
-  PESAPAL_SUBMIT_ORDER_DEMO_URL,
-  PESAPAL_SUBMIT_ORDER_PROD_URL,
-  IPN_BASE_URL,
-} = process.env;
-
-if (
-  !MODE ||
-  !PESAPAL_SUBMIT_ORDER_DEMO_URL ||
-  !PESAPAL_SUBMIT_ORDER_PROD_URL ||
-  !IPN_BASE_URL
-) {
-  throw new Error("Some environment variables are missing");
-}
-
-let PESAPAL_SUBMIT_ORDER_URL: string;
-
-if (MODE === "DEV") {
-  PESAPAL_SUBMIT_ORDER_URL = PESAPAL_SUBMIT_ORDER_DEMO_URL;
-} else {
-  PESAPAL_SUBMIT_ORDER_URL = PESAPAL_SUBMIT_ORDER_PROD_URL;
-}
+const { IPN_BASE_URL } = process.env;
 
 // region /register_membership
 router.post(
@@ -55,6 +33,7 @@ router.post(
 
       // get body from request
       const { price, type } = req.body;
+      const { id } = (req as any).user; // any because user is not defined in Request type
 
       // validate the request body
       if (!price || !type) {
@@ -62,7 +41,7 @@ router.post(
       }
 
       const payload = {
-        id: crypto.randomUUID(),
+        id: `subscription?amount=1&membership_type=${type}&user_id=${id}`,
         currency: "KES",
         // amount: MODE === "DEV" ? 1 : price, //TODO: uncomment this line For production
         amount: 1, //TODO: remove this line For production

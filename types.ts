@@ -1,3 +1,6 @@
+/**
+ * @description: This file contains all the types used in the application ``FOR BACKEND``
+ */
 export type tokenType = {
   token: string;
   expiryDate: string;
@@ -42,4 +45,32 @@ export interface SignUpRequestType {
 export interface ValidationReturnType {
   message: string;
   error: boolean;
+}
+export interface SubmitOrderCallbackResponseType {
+  OrderNotificationType: string;
+  OrderTrackingId: string;
+  OrderMerchantReference: string;
+}
+
+export interface TransactionStatusResponseType {
+  payment_method: string;
+  amount: number;
+  created_date: string;
+  confirmation_code: string;
+  payment_status_description: string;
+  description: string;
+  message: string;
+  payment_account: string;
+  call_back_url: string;
+  status_code: number;
+  merchant_reference: string;
+  payment_status_code: string;
+  currency: string;
+  error: {
+    error_type: string | null;
+    code: string | null;
+    message: string | null;
+    call_back_url: string | null;
+  };
+  status: string;
 }

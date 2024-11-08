@@ -124,4 +124,10 @@ router.post(
 );
 // endregion /login
 
+// region /logout
+router.get("/logout", (req, res) => {
+  logger.info("Logging out...");
+  res.clearCookie("MNERP_ACCSS_TOK");
+  return res.redirect("/");
+});
 export default router;

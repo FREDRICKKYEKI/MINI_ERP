@@ -30,7 +30,7 @@ export const NavBar = () => {
                 </Link>
               </li>
               <li className="bg-blue-500 px-4 py-2 text-white rounded-full cursor-pointer shadow-lg hover:bg-blue-600 transition duration-300 ease-in-out">
-                <Link to={routes.api("logout")}>Log Out</Link>
+                <a href={routes.api("auth/logout")}>Log Out</a>
               </li>
             </>
           ) : (

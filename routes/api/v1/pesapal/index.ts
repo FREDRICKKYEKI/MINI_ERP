@@ -2,7 +2,14 @@
  * @description - This file contains the routes related to PesaPal especially the protected ones
  */
 import express from "express";
-import { getAccessToken, getIPNUrl } from "./pp_utils";
+import {
+  getAccessToken,
+  getIPNUrl,
+  PESAPAL_REQ_TOKEN_URL,
+  consumer_key,
+  consumer_secret,
+  REG_IPN_URL,
+} from "./pp_utils";
 import { tokenType } from "../../../../types";
 import pkg_logger from "../../../../logger";
 
@@ -11,51 +18,6 @@ const logger = pkg_logger;
 let cached_token: tokenType;
 
 const router = express.Router();
-
-// Environment variables
-const {
-  MODE,
-  PESAPAL_REQ_TOKEN_DEMO_URL,
-  PESAPAL_REQ_TOKEN_PROD_URL,
-  PROD_PESAPAL_consumer_secret,
-  PROD_PESAPAL_consumer_key,
-  DEV_PESAPAL_consumer_key,
-  DEV_PESAPAL_consumer_secret,
-  PESAPAL_REG_IPN_DEMO_URL,
-  PESAPAL_REG_IPN_PROD_URL,
-} = process.env;
-
-let PESAPAL_URL: string;
-let consumer_key: string;
-let consumer_secret: string;
-let REG_IPN_URL: string;
-
-// Check if environment variables are set
-if (
-  !PESAPAL_REQ_TOKEN_DEMO_URL ||
-  !PESAPAL_REQ_TOKEN_PROD_URL ||
-  !PROD_PESAPAL_consumer_key ||
-  !PROD_PESAPAL_consumer_secret ||
-  !DEV_PESAPAL_consumer_key ||
-  !DEV_PESAPAL_consumer_secret ||
-  !PESAPAL_REG_IPN_DEMO_URL ||
-  !PESAPAL_REG_IPN_PROD_URL
-) {
-  throw new Error("Some environment variables are missing");
-}
-
-// Set environment variables
-if (MODE === "DEV") {
-  PESAPAL_URL = PESAPAL_REQ_TOKEN_DEMO_URL;
-  consumer_key = DEV_PESAPAL_consumer_key;
-  consumer_secret = DEV_PESAPAL_consumer_secret;
-  REG_IPN_URL = PESAPAL_REG_IPN_DEMO_URL;
-} else {
-  PESAPAL_URL = PESAPAL_REQ_TOKEN_PROD_URL;
-  consumer_key = PROD_PESAPAL_consumer_key;
-  consumer_secret = PROD_PESAPAL_consumer_secret;
-  REG_IPN_URL = PESAPAL_REG_IPN_PROD_URL;
-}
 
 // region Refresh Token
 /**
@@ -66,7 +28,7 @@ async function refreshToken() {
   logger.info("Refreshing token...");
   return new Promise((resolve, reject) => {
     getAccessToken({
-      url: PESAPAL_URL,
+      url: PESAPAL_REQ_TOKEN_URL,
       consumer_key,
       consumer_secret,
     })
