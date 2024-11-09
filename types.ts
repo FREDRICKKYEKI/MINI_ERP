@@ -74,3 +74,12 @@ export interface TransactionStatusResponseType {
   };
   status: string;
 }
+
+export interface parsedOrderMerchantReferenceType {
+  transaction_type: "subscription" | "contribution";
+  amount: string;
+  user_id: string;
+  unique_id: string;
+  sub_type?: "Free" | "Pro" | "Enterprise";
+  purpose?: string;
+}

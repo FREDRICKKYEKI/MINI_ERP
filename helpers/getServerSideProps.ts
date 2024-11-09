@@ -1,7 +1,9 @@
 import { Request } from "express";
-import pkg_sub from "../db_engine/models/Subscription";
-
-const Subscription = pkg_sub;
+import Subscription from "../db_engine/models/Subscription";
+import Contribution from "../db_engine/models/Contribution";
+import User from "../db_engine/models/User";
+import Transaction from "../db_engine/models/Transaction";
+import Role from "../db_engine/models/Role";
 
 /**
  * @description Get server side props for different pages
@@ -39,6 +41,31 @@ const getServerSideProps = async (req: any) => {
       console.debug("/plans");
       break;
     case "/subscriptions":
+      break;
+    case "/admin/dashboard":
+      req.__global_props__.tables = {};
+      // 1. Retrieve all users without password
+      const users = await User.findAll({
+        attributes: { exclude: ["password"] },
+      });
+      // 2. Retrieve all subscriptions
+      const subscriptions = await Subscription.findAll({});
+      // 3. Retrieve all contributions
+      const contributions = await Contribution.findAll({});
+      // 4. Retrieve all transactions
+      const transactions = await Transaction.findAll({});
+      // 5. Retrieve all roles
+      const roles = await Role.findAll({});
+
+      // Add tables to global props
+      req.__global_props__.tables = {
+        users,
+        subscriptions,
+        contributions,
+        transactions,
+        roles,
+      };
+
       break;
     default:
       break;

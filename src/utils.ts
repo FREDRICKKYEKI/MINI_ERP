@@ -2,6 +2,9 @@ import { membershipPlanType } from "./types";
 
 /**
  * @description Membership plans
+ * These should be stored in the database in a real-world application but for this project,
+ * we'll hardcode them since this is a DEMO.
+ * @type {membershipPlanType[]}
  */
 export const membershipPlans: membershipPlanType[] = [
   {
@@ -24,3 +27,8 @@ export const membershipPlans: membershipPlanType[] = [
     includes: ["All features in Pro plan", "1:1 mentorship"],
   },
 ];
+
+// capitalize the first letter of a string
+export function capitalize(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}

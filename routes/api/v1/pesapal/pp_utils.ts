@@ -3,6 +3,7 @@
  */
 
 import pkg_logger from "../../../../logger";
+import { parsedOrderMerchantReferenceType } from "../../../../types";
 
 const logger = pkg_logger;
 // region utility variables
@@ -137,14 +138,6 @@ export const getIPNUrl = (path: string) => {
 };
 // endregion
 
-interface parsedOrderMerchantReferenceType {
-  transaction_type: "subscription" | "contribution";
-  amount: string;
-  user_id: string;
-  unique_id: string;
-  sub_type?: "Free" | "Pro" | "Enterprise";
-  purpose?: string;
-}
 /**
  * @description Parse the OrderMerchantReference
  * - sample OrderMerchantReference: `membership_subscription?amount=1&membership_type=${type}&user_id=${id}&unique_id=${unique_id}`

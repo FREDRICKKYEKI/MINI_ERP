@@ -31,7 +31,7 @@ export const routes = {
   success: "/success",
   logIn: "/login",
   signUp: "/signup",
-  dashboard: "/dashboard",
+  dashboard: "admin/dashboard",
   api: (endpoint: string) => `/api/v1/${endpoint}`, //FIXME: the version should be dynamic and not hardcoded
 };
 // =====================================================================
