@@ -3,9 +3,11 @@ import db from "../db";
 
 interface SubscriptionAttributes {
   id?: string;
+  type: "Free" | "Pro" | "Enterprise";
   transaction_id: string;
   start_date: string;
   expiry_date: string;
+  user_id: string;
   status?: "active" | "expired";
 }
 
@@ -36,10 +38,23 @@ Subscription.init(
       type: DataTypes.DATEONLY,
       allowNull: false,
     },
+    type: {
+      type: DataTypes.ENUM("Free", "Pro", "Enterprise"),
+      allowNull: false,
+    },
     status: {
       type: DataTypes.ENUM("active", "expired"),
       defaultValue: "active",
       allowNull: false,
+    },
+    user_id: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      unique: true,
+      references: {
+        model: "users",
+        key: "id",
+      },
     },
   },
   {

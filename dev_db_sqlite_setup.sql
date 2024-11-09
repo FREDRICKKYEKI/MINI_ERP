@@ -45,8 +45,11 @@ CREATE TABLE IF NOT EXISTS subscriptions (
     transaction_id INT UNIQUE NOT NULL,
     start_date DATE NOT NULL,
     expiry_date DATE NOT NULL,
+    user_id TEXT NOT NULL UNIQUE,
+    type TEXT CHECK(type IN ('Free', 'Pro', 'Enterprise')) NOT NULL,
     status TEXT CHECK(status IN ('active', 'expired')) NOT NULL DEFAULT 'active',
-    FOREIGN KEY (transaction_id) REFERENCES transactions(id)
+    FOREIGN KEY (transaction_id) REFERENCES transactions(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 -- Create the `contributions` table

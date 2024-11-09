@@ -13,7 +13,14 @@ if (MODE === "DEV") {
     storage: "dev_db.db",
   });
 } else if (MODE === "PROD") {
-  throw new Error("PROD mode db connection not implemented yet");
+  // throw new Error("PROD mode db connection not implemented yet");
+  logger.warn(
+    "MYSQL connection not implemented yet. Still using sqlite in DEV mode."
+  );
+  db = new Sequelize({
+    dialect: "sqlite",
+    storage: "dev_db.db",
+  });
 }
 
 // Test the connection

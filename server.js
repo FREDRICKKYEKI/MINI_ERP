@@ -67,6 +67,10 @@ logger.info(`MODE: ${MODE}`);
 const apiEntryPoint = await vite.ssrLoadModule("/routes/apiEntryPoint.ts");
 const utils = await vite.ssrLoadModule("/routes/utils.ts");
 const checkAuth = utils.checkAuth;
+const getServerSideProps_ = await vite.ssrLoadModule(
+  "/helpers/getServerSideProps.ts"
+);
+const getServerSideProps = getServerSideProps_.default;
 // ==============================================================
 
 // register routes
@@ -77,6 +81,7 @@ app.use("*all", async (req, res) => {
   try {
     const isAuthenticated = await checkAuth(req);
     const url = req.originalUrl.replace(base, "");
+    getServerSideProps(req);
 
     let template;
     let render;

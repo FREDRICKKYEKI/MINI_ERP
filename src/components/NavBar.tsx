@@ -12,15 +12,15 @@ export const NavBar = () => {
     >
       <ul className="flex justify-between items-center p-5">
         <li>
-          <Link to={routes.home} className="text-lg font-bold">
+          <a href={routes.home} className="text-lg font-bold">
             Mini ERP
-          </Link>
+          </a>
         </li>
         <li className="flex gap-4 text-lg font-normal items-center">
           <li>
-            <Link to={routes.chooseMembership} className="">
+            <a href={routes.chooseMembership} className="">
               View Plans
-            </Link>
+            </a>
           </li>
           {isAuth ? (
             <>

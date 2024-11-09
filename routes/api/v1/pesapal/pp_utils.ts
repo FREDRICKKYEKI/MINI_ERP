@@ -140,12 +140,13 @@ export const getIPNUrl = (path: string) => {
 interface parsedOrderMerchantReferenceType {
   transaction_type: "subscription" | "contribution";
   amount: string;
-  membership_type: string;
   user_id: string;
+  unique_id: string;
+  sub_type: "Free" | "Pro" | "Enterprise";
 }
 /**
  * @description Parse the OrderMerchantReference
- * - sample OrderMerchantReference: `membership_subscription?amount=1&membership_type=${type}&user_id=${id}`
+ * - sample OrderMerchantReference: `membership_subscription?amount=1&membership_type=${type}&user_id=${id}&unique_id=${unique_id}`
  * @param OrderMerchantReference - the OrderMerchantReference from the callback
  * @returns
  */
@@ -153,7 +154,7 @@ export const parseOrderMerchantReference = (
   OrderMerchantReference: string
 ): parsedOrderMerchantReferenceType => {
   //
-  // which corresponds to: transcation_type?amount=1&membership_type=1&user_id=1
+  // which corresponds to: transcation_type?amount=1&membership_type=1&user_id=1&unique_id={unique_id}
 
   // first split the OrderMerchantReference by "?"
   const [transaction_type, params] = OrderMerchantReference.split("?");
@@ -171,6 +172,8 @@ export const parseOrderMerchantReference = (
   });
 
   paramsObj.transaction_type = transaction_type;
+
+  logger.debug("parsedOrderMerchantReference:", paramsObj);
 
   return paramsObj;
 };

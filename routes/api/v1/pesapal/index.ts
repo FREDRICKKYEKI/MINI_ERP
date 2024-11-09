@@ -51,7 +51,7 @@ async function refreshToken() {
  * expired (PesaPal Tokens expire after 5mins), it refreshes it.
  * @returns - access token
  */
-const getToken = async () => {
+export const getToken = async () => {
   logger.info("Getting token...");
   if (!cached_token) {
     return new Promise((resolve, reject) => {

@@ -38,10 +38,11 @@ router.post(
       // validate the request body
       if (!price || !type) {
         res.status(400).json({ message: "price and type are required!" });
+        return;
       }
-
+      const unique_id = crypto.randomUUID();
       const payload = {
-        id: `subscription?amount=1&membership_type=${type}&user_id=${id}`,
+        id: `subscription?amount=1&sub_type=${type}&user_id=${id}&unique_id=${unique_id}`,
         currency: "KES",
         // amount: MODE === "DEV" ? 1 : price, //TODO: uncomment this line For production
         amount: 1, //TODO: remove this line For production
