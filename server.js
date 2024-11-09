@@ -79,9 +79,12 @@ app.use("/api", apiEntryPoint.default);
 // Serve HTML
 app.use("*all", async (req, res) => {
   try {
-    const isAuthenticated = await checkAuth(req);
+    // check if user is authenticated and attach user object to the request object
+    await checkAuth(req);
     const url = req.originalUrl.replace(base, "");
-    getServerSideProps(req);
+
+    // attaches server side props to the request object
+    await getServerSideProps(req);
 
     let template;
     let render;
@@ -95,11 +98,7 @@ app.use("*all", async (req, res) => {
       render = (await import("./dist/server/entry-server.js")).render;
     }
 
-    const rendered = await render(
-      req.originalUrl,
-      ssrManifest,
-      isAuthenticated
-    );
+    const rendered = await render(req.originalUrl, ssrManifest, req);
 
     const html = template
       .replace(`<!--app-head-->`, rendered.head ?? "")

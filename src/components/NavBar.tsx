@@ -4,6 +4,8 @@ import { useAppContext } from "../contexts/AppContext";
 
 export const NavBar = () => {
   const isAuth: boolean | undefined = useAppContext().isSignedIn;
+  const isSubbed = useAppContext().globalState?.user?.isSubscribed;
+
   return (
     <nav
       className="
@@ -17,17 +19,19 @@ export const NavBar = () => {
           </a>
         </li>
         <li className="flex gap-4 text-lg font-normal items-center">
-          <li>
-            <a href={routes.chooseMembership} className="">
-              View Plans
-            </a>
-          </li>
+          {!isSubbed && (
+            <li>
+              <a href={routes.chooseMembership} className="">
+                View Plans
+              </a>
+            </li>
+          )}
           {isAuth ? (
             <>
               <li>
-                <Link to={routes.dashboard} className="">
+                <a href={routes.dashboard} className="">
                   Dashboard
-                </Link>
+                </a>
               </li>
               <li className="bg-blue-500 px-4 py-2 text-white rounded-full cursor-pointer shadow-lg hover:bg-blue-600 transition duration-300 ease-in-out">
                 <a href={routes.api("auth/logout")}>Log Out</a>

@@ -1,8 +1,5 @@
 -- database: ./dev_db.db
 
--- SELECT * FROM roles;
-
-
 -- Description: SQL script to create the database schema for the Mini ERP application using SQLite
 -- database: C:\Users\FRED\MINI_ERP\dev_db.db
 -- Create the `users` table
@@ -30,7 +27,7 @@ CREATE TABLE IF NOT EXISTS roles (
 -- Create the `transactions` table
 CREATE TABLE IF NOT EXISTS transactions (
     id TEXT PRIMARY KEY NOT NULL,
-    user_id INT NOT NULL,
+    user_id TEXT NOT NULL,
     amount DECIMAL(10, 2) NOT NULL,
     transaction_type TEXT CHECK(transaction_type IN ('subscription', 'contribution')) NOT NULL,
     transaction_date DATE NOT NULL DEFAULT CURRENT_DATE,
@@ -42,25 +39,27 @@ CREATE TABLE IF NOT EXISTS transactions (
 -- Create the `subscriptions` table
 CREATE TABLE IF NOT EXISTS subscriptions (
     id TEXT PRIMARY KEY NOT NULL,
-    transaction_id INT UNIQUE NOT NULL,
+    transaction_id TEXT UNIQUE NOT NULL,
     start_date DATE NOT NULL,
     expiry_date DATE NOT NULL,
     user_id TEXT NOT NULL UNIQUE,
     type TEXT CHECK(type IN ('Free', 'Pro', 'Enterprise')) NOT NULL,
-    status TEXT CHECK(status IN ('active', 'expired')) NOT NULL DEFAULT 'active',
+    status TEXT CHECK(status IN ('active', 'expired', 'cancelled')) NOT NULL DEFAULT 'active',
     FOREIGN KEY (transaction_id) REFERENCES transactions(id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 -- Create the `contributions` table
+-- USer can make multiple contributions so user_id is not unique
 CREATE TABLE IF NOT EXISTS contributions (
     id TEXT PRIMARY KEY NOT NULL,
-    transaction_id INT UNIQUE NOT NULL,
+    transaction_id TEXT UNIQUE NOT NULL,
     purpose VARCHAR(255),
-    FOREIGN KEY (transaction_id) REFERENCES transactions(id)
+    user_id TEXT NOT NULL,
+    FOREIGN KEY (transaction_id) REFERENCES transactions(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 -- insert the main roles into the roles table
 INSERT INTO roles (role_name, description) VALUES
     ('admin', 'Administrator role'),
     ('member', 'Standard member role');
-

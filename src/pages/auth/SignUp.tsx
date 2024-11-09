@@ -114,7 +114,10 @@ const SignUp = () => {
             </div>
 
             {/* region role */}
-            {/* FIXME: These should come from the backend */}
+            {/**
+             * NOTE: 1. THIS IS A DEMO, SO WE WILL HARDCODE THE VALUES
+             * NOTE: 2. We are allowing users to choose their role, for DEMO purposes
+             */}
             <div className="mb-4">
               <label
                 className="block text-gray-600 font-semibold mb-2"

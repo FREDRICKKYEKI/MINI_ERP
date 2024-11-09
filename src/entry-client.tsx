@@ -16,7 +16,10 @@ hydrateRoot(
   document.getElementById("root") as HTMLElement,
   <StrictMode>
     <BrowserRouter>
-      <AppContextProvider isSignedIn={window?.__isAuth__ as boolean}>
+      <AppContextProvider
+        isSignedIn={window?.__isAuth__ as boolean}
+        globalState={window.__GLOBAL_STATE__}
+      >
         <App />
       </AppContextProvider>
     </BrowserRouter>

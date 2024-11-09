@@ -89,6 +89,13 @@ export const checkAuth = async (req): Promise<boolean> => {
         if (err) {
           reject(err); // Reject the promise if the token is invalid
         }
+
+        const { id, email, role } = decoded as any;
+        req.user = {
+          id,
+          email,
+          role,
+        }; // Set the user object in the request
         resolve(decoded); // Resolve with decoded token if successful
       });
     });

@@ -2,6 +2,7 @@ import express from "express";
 import pkg_logger from "../../../../logger";
 import pkg_trans from "../../../../db_engine/models/Transaction";
 import pkg_subs from "../../../../db_engine/models/Subscription";
+import pkg_contribution from "../../../../db_engine/models/Contribution";
 import {
   SubmitOrderCallbackResponseType,
   TransactionStatusResponseType,
@@ -19,6 +20,7 @@ import { getToken } from ".";
 const logger = pkg_logger;
 const Transaction = pkg_trans;
 const Subscription = pkg_subs;
+const Contribution = pkg_contribution;
 const router = express.Router();
 
 // region /callback
@@ -61,8 +63,7 @@ router.post(
       // redirect to the success url
 
       // 1. parse the OrderMerchantReference
-      const { transaction_type, amount, sub_type, user_id } =
-        parseOrderMerchantReference(OrderMerchantReference);
+      const parsedOMR = parseOrderMerchantReference(OrderMerchantReference);
 
       // check if trnsaction_id exists in the database
       const transactionExists = await Transaction.findOne({
@@ -75,13 +76,13 @@ router.post(
       // 2. create the transaction status in the database
       const transaction = await Transaction.create({
         id: OrderTrackingId,
-        transaction_type: transaction_type,
-        amount: amount,
-        user_id: user_id,
+        transaction_type: parsedOMR.transaction_type,
+        amount: parsedOMR.amount,
+        user_id: parsedOMR.user_id,
       });
 
       // handle the different transaction types
-      if (transaction_type == "subscription") {
+      if (parsedOMR.transaction_type == "subscription") {
         // 3. update the subscription table
         const start_date = new Date();
         // 30 days from now
@@ -91,7 +92,7 @@ router.post(
 
         // check if the user already has a subscription
         const userSubscription = await Subscription.findOne({
-          where: { user_id: user_id },
+          where: { user_id: parsedOMR.user_id },
         });
 
         if (userSubscription) {
@@ -101,20 +102,44 @@ router.post(
           return;
         }
 
+        // check if the membership type is valid (for debugging purposes)
+        if (!["Free", "Pro", "Enterprise"].includes(parsedOMR.sub_type || "")) {
+          logger.debug("Invalid membership type");
+          throw new Error("Invalid membership type");
+        }
+
+        // check if the membership type is provided (for debugging purposes)
+        if (!parsedOMR.sub_type) {
+          logger.debug("Membership type is required");
+          throw new Error("Membership type is required");
+        }
+
         // create a subscription
         const subscription = await Subscription.create({
           transaction_id: OrderTrackingId,
-          user_id: user_id,
-          type: sub_type,
+          user_id: parsedOMR.user_id,
+          type: parsedOMR.sub_type,
           start_date: start_date.toISOString(),
           expiry_date: end_date.toISOString(),
         });
         // 4. send an email to the user
         // NOTE: this is not implemented yet
         return;
-      } else if (transaction_type == "contribution") {
-        logger.warn("Contribution model not implemented yet!");
-        throw new Error("Not implemented yet!");
+      } else if (parsedOMR.transaction_type == "contribution") {
+        // check if the purpose is provided for debugging purposes
+        if (!parsedOMR.purpose) {
+          logger.error("Purpose is required for contributions");
+          throw new Error("Purpose is required for contributions");
+          return;
+        }
+        // 3. update the contributions table
+        const contribution = await Contribution.create({
+          transaction_id: OrderTrackingId,
+          user_id: parsedOMR.user_id,
+          purpose: parsedOMR.purpose,
+        });
+        // 4. send an email to the user
+        // NOTE: this is not implemented yet
       } else {
         logger.error("Invalid membership type");
         return;

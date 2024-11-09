@@ -142,7 +142,8 @@ interface parsedOrderMerchantReferenceType {
   amount: string;
   user_id: string;
   unique_id: string;
-  sub_type: "Free" | "Pro" | "Enterprise";
+  sub_type?: "Free" | "Pro" | "Enterprise";
+  purpose?: string;
 }
 /**
  * @description Parse the OrderMerchantReference

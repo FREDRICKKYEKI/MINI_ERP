@@ -43,7 +43,7 @@ Subscription.init(
       allowNull: false,
     },
     status: {
-      type: DataTypes.ENUM("active", "expired"),
+      type: DataTypes.ENUM("active", "expired", "cancelled"),
       defaultValue: "active",
       allowNull: false,
     },
