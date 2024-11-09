@@ -6,13 +6,14 @@ import index from "./api/v1/pesapal/index";
 import callback from "./api/v1/pesapal/callback";
 import submitOrder from "./api/v1/pesapal/submitOrder";
 import authRoutes from "./api/v1/auth/authRoutes";
-import { isAuth, isAdmin } from "./middlewares/middlewares";
+import cronRoutes from "./api/v1/cron/cronRoutes";
+import { isAuth, isAdmin, isCronAuth } from "./middlewares/middlewares";
 import adminRoutes from "./api/v1/admin/adminRoutes";
 
 const router = express.Router();
 
-// ========================================================================
 // pesapal routes not exposed to the public NOTE: They should be protected with a secret key
+// ========================================================================
 router.use("/v1/pesapal", index);
 router.use("/v1/pesapal", callback);
 // ========================================================================
@@ -26,4 +27,6 @@ router.use("/v1/auth", authRoutes);
 // admin routes
 router.use("/v1/admin", isAuth, isAdmin, adminRoutes);
 
+// cron routes
+router.use("/v1/cron", isCronAuth, cronRoutes);
 export default router;

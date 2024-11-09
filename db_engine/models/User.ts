@@ -5,10 +5,11 @@ import { DataTypes, Model } from "sequelize";
 import db from "../db";
 import pkg_bcrypt from "bcrypt";
 import pkg_jwt from "jsonwebtoken";
-import Subscription from "./Subscription";
+import pkg_sub from "./Subscription";
 import Contribution from "./Contribution";
 import Transaction from "./Transaction";
 
+const Subscription = pkg_sub;
 const bcrypt = pkg_bcrypt;
 const jwt = pkg_jwt;
 
@@ -131,7 +132,7 @@ User.init(
 
 // associations
 // 1. User has one Subscription
-User.hasOne(Subscription, { foreignKey: "user_id" });
+// User.hasOne(Subscription, { foreignKey: "user_id" });
 // 2. User has many Contributions
 User.hasMany(Contribution, { foreignKey: "user_id" });
 // 3. User has many Transactions

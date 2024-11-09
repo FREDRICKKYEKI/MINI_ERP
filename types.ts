@@ -1,6 +1,10 @@
 /**
  * @description: This file contains all the types used in the application ``FOR BACKEND``
  */
+
+/**
+ * @description: PesaPal Access Token Type
+ */
 export type tokenType = {
   token: string;
   expiryDate: string;
@@ -11,6 +15,9 @@ export type tokenType = {
   createdAt: Date;
 };
 
+/**
+ * @description: PesaPal IPN Registration Response Type
+ */
 export interface IPNRegResponseType {
   url: string;
   created_date: string;
@@ -24,6 +31,10 @@ export interface IPNRegResponseType {
   token?: string;
 }
 
+/**
+ * @description: Pesapal Submit Order Request Type
+ * - Enables us to redirect to the payment gateway page.
+ */
 export interface SubmitOrderResponseType {
   order_tracking_id: string;
   merchant_reference: string;
@@ -32,6 +43,9 @@ export interface SubmitOrderResponseType {
   status: string;
 }
 
+/**
+ * @description: SignUp request body type
+ */
 export interface SignUpRequestType {
   first_name: string;
   last_name: string;
@@ -42,16 +56,25 @@ export interface SignUpRequestType {
   role: string;
 }
 
+/**
+ * @description: Return for validateRegistrationDetails function.
+ */
 export interface ValidationReturnType {
   message: string;
   error: boolean;
 }
+/**
+ * @description: Callback response from PesaPal
+ */
 export interface SubmitOrderCallbackResponseType {
   OrderNotificationType: string;
   OrderTrackingId: string;
   OrderMerchantReference: string;
 }
 
+/**
+ * @description: Transaction Status Response Type
+ */
 export interface TransactionStatusResponseType {
   payment_method: string;
   amount: number;
@@ -75,6 +98,9 @@ export interface TransactionStatusResponseType {
   status: string;
 }
 
+/**
+ * @description: Parsed Order Merchant Reference Type
+ */
 export interface parsedOrderMerchantReferenceType {
   transaction_type: "subscription" | "contribution";
   amount: string;

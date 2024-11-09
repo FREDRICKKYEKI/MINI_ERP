@@ -1,3 +1,17 @@
+/**
+ * @description Transaction model
+ CREATE TABLE IF NOT EXISTS transactions (
+    id TEXT PRIMARY KEY NOT NULL,
+    user_id TEXT NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL,
+    transaction_type TEXT CHECK(transaction_type IN ('subscription', 'contribution')) NOT NULL,
+    transaction_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+ */
 import { Model, DataTypes } from "sequelize";
 import pkg_db from "../db";
 

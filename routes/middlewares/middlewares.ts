@@ -5,6 +5,13 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
+const { CRON_SERVICE_SECRET } = process.env;
+
+if (!CRON_SERVICE_SECRET) {
+  throw new Error(
+    "`CRON_SERVICE_SECRET` is not set in the environment variables"
+  );
+}
 // Extend the Request interface to include the user property
 declare module "express-serve-static-core" {
   interface Request {
@@ -51,5 +58,19 @@ export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
     next();
   } else {
     res.redirect("/login");
+  }
+};
+
+export const isCronAuth = (req: Request, res: Response, next: NextFunction) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    res.status(401).send({ message: "Unauthorized" });
+    return;
+  }
+  const token = authHeader.split(" ")[1];
+  if (token === CRON_SERVICE_SECRET) {
+    next();
+  } else {
+    res.status(401).send({ message: "Unauthorized" });
   }
 };

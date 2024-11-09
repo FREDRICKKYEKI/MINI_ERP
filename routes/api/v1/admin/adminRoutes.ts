@@ -15,9 +15,9 @@ router.get(
   "/getAllUserData",
   expressAsyncHandler(async (req, res) => {
     // Retrieve all users with subscriptions and contributions
-
-    res.status(200).json({});
+    throw new Error("Not yet implemented!");
   })
 );
+// endregion
 
 export default router;

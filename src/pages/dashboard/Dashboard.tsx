@@ -40,7 +40,9 @@ const Dashboard = () => {
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
       <aside className="w-1/5 bg-blue-950 text-white">
-        <h1 className="text-xl p-4 font-bold mb-8">MINI ERP</h1>
+        <h1 className="text-xl p-6 font-bold mb-8">
+          <a href="/">MINI ERP</a>
+        </h1>
         <hr className="border-gray-700 border-1 mb-4" />
 
         <h2 className="text-md font-medium text-gray-400 px-3">Tables</h2>

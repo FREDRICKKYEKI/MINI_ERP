@@ -1,4 +1,4 @@
--- database: ./dev_db.db
+-- database: ./prod_db.db
 
 -- Description: SQL script to create the database schema for the Mini ERP application using SQLite
 -- database: C:\Users\FRED\MINI_ERP\dev_db.db

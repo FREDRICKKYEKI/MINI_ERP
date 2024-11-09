@@ -5,7 +5,7 @@ import { useAppContext } from "../contexts/AppContext";
 export const NavBar = () => {
   const isAuth: boolean | undefined = useAppContext().isSignedIn;
   const user = useAppContext().globalState?.user;
-  const isSubbed = user.isSubscribed;
+  const isSubbed = user?.isSubscribed;
 
   return (
     <nav

@@ -1,5 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 import db from "../db";
+import User from "./User";
 
 interface SubscriptionAttributes {
   id?: string;
@@ -65,4 +66,8 @@ Subscription.init(
   }
 );
 
+Subscription.belongsTo(User, {
+  foreignKey: "user_id",
+  as: "User",
+});
 export default Subscription;

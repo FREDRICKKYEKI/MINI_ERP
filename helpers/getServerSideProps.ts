@@ -40,7 +40,16 @@ const getServerSideProps = async (req: any) => {
     case "/plans":
       console.debug("/plans");
       break;
-    case "/subscriptions":
+    case "/success":
+      const params = new URLSearchParams(req.url.split("?")[1]);
+      const orderTrackingId = params.get("OrderTrackingId");
+      // get Transaction details
+      const transaction = await Transaction.findOne({
+        where: { id: orderTrackingId },
+      });
+      if (transaction) {
+        req.__global_props__.transaction = transaction;
+      }
       break;
     case "/admin/dashboard":
       req.__global_props__.tables = {};
@@ -49,11 +58,15 @@ const getServerSideProps = async (req: any) => {
         attributes: { exclude: ["password"] },
       });
       // 2. Retrieve all subscriptions
-      const subscriptions = await Subscription.findAll({});
+      const subscriptions = await Subscription.findAll({
+        order: [["expiry_date", "DESC"]],
+      });
       // 3. Retrieve all contributions
       const contributions = await Contribution.findAll({});
       // 4. Retrieve all transactions
-      const transactions = await Transaction.findAll({});
+      const transactions = await Transaction.findAll({
+        order: [["created_at", "DESC"]],
+      });
       // 5. Retrieve all roles
       const roles = await Role.findAll({});
 

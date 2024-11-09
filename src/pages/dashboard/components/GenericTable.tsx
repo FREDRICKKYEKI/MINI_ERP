@@ -8,7 +8,7 @@ interface DataTableProps {
 const DataTable: FC<DataTableProps> = ({ data, title }) => {
   // If no data is provided, render a message
   if (!data || data.length === 0) {
-    return <p>No data available.</p>;
+    return <p>{capitalize(title)} table is empty.</p>;
   }
 
   // Get the keys from the first object to use as table headers

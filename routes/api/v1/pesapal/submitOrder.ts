@@ -49,7 +49,7 @@ router.post(
         // amount: MODE === "DEV" ? 1 : price, //TODO: uncomment this line For production
         amount: 1, //TODO: remove this line For production
         description: "Membership registration",
-        callback_url: IPN_BASE_URL + "/success?type=subscription",
+        callback_url: "http://localhost:5173/success?type=subscription",
         redirect_mode: "",
         notification_id: ipn_id,
         branch: "MINI ERP", // TODO: create a branch name for this transaction
@@ -144,7 +144,7 @@ router.get(
         // amount: MODE === "DEV" ? 1 : price, //TODO: uncomment this line For production
         amount: 1, //TODO: remove this line For production
         description: "Contribution",
-        callback_url: IPN_BASE_URL + "/success?type=contribution",
+        callback_url: "http://localhost:5173/success?type=contribution",
         redirect_mode: "",
         notification_id: ipn_id,
         branch: "MINI ERP", // TODO: create a branch name for this transaction

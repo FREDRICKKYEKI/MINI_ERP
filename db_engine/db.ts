@@ -19,7 +19,7 @@ if (MODE === "DEV") {
   );
   db = new Sequelize({
     dialect: "sqlite",
-    storage: "dev_db.db",
+    storage: "prod_db.db",
   });
 }
 
