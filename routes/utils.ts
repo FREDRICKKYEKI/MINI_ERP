@@ -2,10 +2,9 @@
  * @description: This file contains utility functions used in the api routes.
  */
 
+import logger from "../logger";
 import { SignUpRequestType, ValidationReturnType } from "../types";
-import pkg_jwt from "jsonwebtoken";
-
-const jwt = pkg_jwt;
+import jwt from "jsonwebtoken";
 
 /**
  * @description This function validates the registration details
@@ -90,11 +89,12 @@ export const checkAuth = async (req): Promise<boolean> => {
           reject(err); // Reject the promise if the token is invalid
         }
 
-        const { id, email, role } = decoded as any;
+        const { id, email, role_id } = decoded as any;
+        logger.debug("Decoded token", decoded);
         req.user = {
           id,
           email,
-          role,
+          role_id,
         }; // Set the user object in the request
         resolve(decoded); // Resolve with decoded token if successful
       });

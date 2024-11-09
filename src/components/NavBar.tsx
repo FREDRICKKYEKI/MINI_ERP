@@ -4,7 +4,8 @@ import { useAppContext } from "../contexts/AppContext";
 
 export const NavBar = () => {
   const isAuth: boolean | undefined = useAppContext().isSignedIn;
-  const isSubbed = useAppContext().globalState?.user?.isSubscribed;
+  const user = useAppContext().globalState?.user;
+  const isSubbed = user.isSubscribed;
 
   return (
     <nav
@@ -28,11 +29,13 @@ export const NavBar = () => {
           )}
           {isAuth ? (
             <>
-              <li>
-                <a href={routes.dashboard} className="">
-                  Dashboard
-                </a>
-              </li>
+              {user.role_id === 1 && (
+                <li>
+                  <a href={routes.dashboard} className="">
+                    Dashboard
+                  </a>
+                </li>
+              )}
               <li className="bg-blue-500 px-4 py-2 text-white rounded-full cursor-pointer shadow-lg hover:bg-blue-600 transition duration-300 ease-in-out">
                 <a href={routes.api("auth/logout")}>Log Out</a>
               </li>

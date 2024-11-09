@@ -83,6 +83,10 @@ app.use("*all", async (req, res) => {
     await checkAuth(req);
     const url = req.originalUrl.replace(base, "");
 
+    // log the request
+    const method = req.method;
+    logger.info(`[${method}]: /${url}`);
+
     // attaches server side props to the request object
     await getServerSideProps(req);
 

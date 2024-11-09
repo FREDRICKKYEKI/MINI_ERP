@@ -12,7 +12,14 @@ declare module "express-serve-static-core" {
   }
 }
 
-const isAuth = (req: Request, res: Response, next: NextFunction) => {
+/**
+ * @description: Middleware to check if user is authenticated
+ * @param req - Request
+ * @param res - Response
+ * @param next - NextFunction
+ * @returns void
+ */
+export const isAuth = (req: Request, res: Response, next: NextFunction) => {
   // get token from cookie `MNERP_ACCSS_TOK`
   const token = req.cookies.MNERP_ACCSS_TOK;
   if (!token) {
@@ -33,4 +40,16 @@ const isAuth = (req: Request, res: Response, next: NextFunction) => {
   });
 };
 
-export default isAuth;
+/**
+ * @description: Middleware to check if user is an admin
+ * @param req - Request
+ * @param res - Response
+ * @param next - NextFunction
+ */
+export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
+  if (req.user.role_id === 1) {
+    next();
+  } else {
+    res.redirect("/login");
+  }
+};
