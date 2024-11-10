@@ -10,6 +10,8 @@ const {
   MYSQL_HOST,
   MYSQL_PORT,
   USE_SQLITE_PROD,
+  REMOTE_MYSQL_URI,
+  USE_REMOTE_MYSQL_PROD,
 } = process.env;
 
 if (
@@ -19,7 +21,9 @@ if (
   !MYSQL_DATABASE ||
   !MYSQL_HOST ||
   !MYSQL_PORT ||
-  !USE_SQLITE_PROD
+  !USE_SQLITE_PROD ||
+  !REMOTE_MYSQL_URI ||
+  !USE_REMOTE_MYSQL_PROD
 ) {
   logger.error("Some environment variables are missing. Exiting...");
   process.exit(1);
@@ -46,10 +50,21 @@ if (MODE === "DEV") {
       storage: "prod_db.db",
     });
   } else {
-    db = new Sequelize(MYSQL_DATABASE, MYSQL_USER, MYSQL_PASSWORD, {
-      host: MYSQL_HOST,
-      dialect: "mysql",
-    });
+    if (USE_REMOTE_MYSQL_PROD === "true") {
+      db = new Sequelize(REMOTE_MYSQL_URI, {
+        dialectOptions: {
+          ssl: {
+            require: true,
+            rejectUnauthorized: false,
+          },
+        },
+      });
+    } else {
+      db = new Sequelize(MYSQL_DATABASE, MYSQL_USER, MYSQL_PASSWORD, {
+        host: MYSQL_HOST,
+        dialect: "mysql",
+      });
+    }
   }
 }
 

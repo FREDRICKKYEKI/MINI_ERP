@@ -82,6 +82,14 @@ This is a basic application that allows users to:
    - Create a database named `mini_erp_db` in MySQL.
    - Run the SQL scripts to create tables and sample data.
 
+1. **Run ngrok:**
+   ```bash
+   ngrok http 5173
+   ```
+   - Copy the forwarding URL (e.g., `https://xxxxxx.ngrok.io`) for webhook setup.
+   - Paste it in the `BACKEND.ENV` file under `IPN_BASE_URL`.
+   - Watch [this](https://www.youtube.com/watch?v=gdfxoNfVxMU&ab_channel=UMESKIASOFTWARES) video to learn how to install/use ngrok.
+
 4. **Environment Configuration:**
    - Create a `BACKEND.ENV` file in the project root (the name is IMPORTANT and case-sensitive).:
      ```bash
