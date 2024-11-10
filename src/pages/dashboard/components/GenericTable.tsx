@@ -1,3 +1,7 @@
+/**
+ * This component is a generic table that can be used to display any data.
+ * We will use this for DEMO purposes only. And use individual tables for each data type.
+ */
 import { FC } from "react";
 import { capitalize } from "../../../utils";
 

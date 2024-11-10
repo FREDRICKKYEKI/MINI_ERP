@@ -94,7 +94,11 @@ router.post(
         });
         return;
       }
+      // expose only active subscriptions
       const data = await Subscription.findAll({
+        where: {
+          status: "active",
+        },
         include: [
           {
             model: includeModels[include],
