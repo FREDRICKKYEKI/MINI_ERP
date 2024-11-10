@@ -1,7 +1,6 @@
 -- database: ./prod_db.db
 
 -- Description: SQL script to create the database schema for the Mini ERP application using SQLite
--- database: C:\Users\FRED\MINI_ERP\dev_db.db
 -- Create the `users` table
 CREATE TABLE IF NOT EXISTS users (
     id TEXT PRIMARY KEY NOT NULL,

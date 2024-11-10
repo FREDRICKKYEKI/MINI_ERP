@@ -23,6 +23,20 @@ const Subscription = pkg_subs;
 const Contribution = pkg_contribution;
 const router = express.Router();
 
+function getDifferenceFromToday(endDateStr: any) {
+  const today = new Date() as any; // Get today's date
+  today.setHours(0, 0, 0, 0); // Set time to midnight for an accurate day comparison
+  const endDate = new Date(endDateStr) as any; // Parse the future date
+
+  // Calculate the difference in milliseconds
+  const differenceInMs = endDate - today;
+
+  // Convert milliseconds to days
+  const differenceInDays = differenceInMs / (1000 * 60 * 60 * 24);
+
+  return Math.floor(differenceInDays); // Round down to the nearest day
+}
+
 // region /callback
 // ===========================================================================
 /**
@@ -94,10 +108,24 @@ router.post(
         const userSubscription = await Subscription.findOne({
           where: { user_id: parsedOMR.user_id },
         });
-
         if (userSubscription) {
           // NOTE: when a user upgrades their subscription, the money should be prorated,
-          // then refunded to the user, hen create a new subscription.
+          // then refunded to the user, then create a new subscription.
+          // if difference bettween expiry date and current date is less < 5 days,
+          // extend the expiry date,
+          if (
+            getDifferenceFromToday(
+              userSubscription.getDataValue("expiry_date")
+            ) < 5
+          ) {
+            userSubscription.setDataValue(
+              "expiry_date",
+              end_date.toISOString()
+            );
+            await userSubscription.save();
+            logger.info("Subscription extended");
+            return;
+          }
           logger.warn("User already has a subscription");
           return;
         }
