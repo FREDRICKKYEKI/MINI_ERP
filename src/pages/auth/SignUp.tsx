@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { routes } from "../../App";
 import { useEffect } from "react";
+import { GoHome } from "./LogIn";
 
 const SignUp = () => {
   useEffect(() => {
@@ -33,6 +34,7 @@ const SignUp = () => {
       </head>
       <div className="flex justify-center items-center h-screen bg-gray-100 pt-3">
         <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
+          <GoHome />
           <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">
             Sign Up to Mini ERP
           </h2>

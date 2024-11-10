@@ -16,16 +16,29 @@ const DataTable: FC<DataTableProps> = ({ data, title }) => {
 
   return (
     <div className="p-4 bg-white shadow-md rounded">
-      <h2 className="text-2xl font-semibold mb-4">{capitalize(title)}</h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-semibold mb-4">{capitalize(title)}</h2>
+        <th className="">
+          <button
+            onClick={() => window.location.reload()}
+            className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition duration-300 ease-in-out"
+          >
+            Refresh
+          </button>
+        </th>
+      </div>
       <table className="min-w-full bg-white border border-gray-200">
-        <thead>
+        <thead
+          className="bg-gray-50 border-b border-gray-300
+        "
+        >
           <tr>
             {headers.map((header) => (
               <th
                 key={header}
                 className="py-2 px-4 border-b border-gray-300 text-left text-gray-700 font-medium"
               >
-                {header.charAt(0).toUpperCase() + header.slice(1)}
+                {capitalize(header)}
               </th>
             ))}
           </tr>

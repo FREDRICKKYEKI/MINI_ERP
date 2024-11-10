@@ -1,7 +1,6 @@
 import fs from "node:fs/promises";
 import express from "express";
 import { configDotenv } from "dotenv";
-// import registerPesaPal from "./routes/pesapal/registerPesaPal.js";
 import logger from "./logger.js";
 import cookieParser from "cookie-parser";
 // ================== load env variables ==================
@@ -63,18 +62,26 @@ if (!MODE) {
 
 logger.info(`MODE: ${MODE}`);
 
-// ========================= api entrypoint ======================
+// ========================= import ts packages ======================
 const apiEntryPoint = await vite.ssrLoadModule("/routes/apiEntryPoint.ts");
 const utils = await vite.ssrLoadModule("/routes/utils.ts");
 const checkAuth = utils.checkAuth;
 const getServerSideProps_ = await vite.ssrLoadModule(
   "/helpers/getServerSideProps.ts"
 );
+const middlewares = await vite.ssrLoadModule(
+  "/routes/middlewares/middlewares.ts"
+);
+const authRedirect = middlewares.authRedirect;
 const getServerSideProps = getServerSideProps_.default;
 // ==============================================================
 
 // register routes
 app.use("/api", apiEntryPoint.default);
+
+// add middlewares
+app.use("/login", authRedirect);
+app.use("/signup", authRedirect);
 
 // Serve HTML
 app.use("*all", async (req, res) => {

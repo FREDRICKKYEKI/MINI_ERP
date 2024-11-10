@@ -22,5 +22,9 @@ export function render(url: string, _options: any, req: any) {
   window.__isAuth__ = ${isAuth}
   window.__GLOBAL_STATE__ = ${JSON.stringify(req.__global_props__)}
   </script>`;
-  return { html, script };
+
+  const head = `
+  <title>MINI ERP</title>
+  `;
+  return { html, script, head };
 }

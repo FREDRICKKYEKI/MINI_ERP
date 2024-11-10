@@ -35,10 +35,8 @@ const getServerSideProps = async (req: any) => {
   switch (basePath) {
     // CONTINUE: handle different base paths and add their respective props
     case "":
-      console.debug("/home");
       break;
     case "/plans":
-      console.debug("/plans");
       break;
     case "/success":
       const params = new URLSearchParams(req.url.split("?")[1]);

@@ -5,6 +5,7 @@ const LogIn = () => {
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="w-full max-w-sm bg-white p-8 rounded-lg shadow-md">
+        <GoHome />
         <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">
           Welcome Back to Mini ERP 👋🏽
           <div className="mt-4">Log in</div>
@@ -39,12 +40,12 @@ const LogIn = () => {
 
           <p className="mt-4">
             Don't have an account?{" "}
-            <Link
-              to={routes.signUp}
+            <a
+              href={routes.signUp}
               className="text-blue-500 font-semibold underline"
             >
               Sign Up
-            </Link>
+            </a>
           </p>
         </form>
       </div>
@@ -53,3 +54,14 @@ const LogIn = () => {
 };
 
 export default LogIn;
+
+export const GoHome = () => {
+  return (
+    <p className="mb-4">
+      &larr; Go{" "}
+      <Link to={routes.home} className="text-blue-500 font-semibold underline">
+        Home
+      </Link>
+    </p>
+  );
+};
