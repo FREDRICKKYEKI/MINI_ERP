@@ -195,5 +195,3 @@ npm test
 This project is licensed under the MIT License.
 
 ---
-
-This `README.md` provides a clear overview of the MINI ERP application and setup steps. Make sure to replace example values (like repository URL) with actual details specific to your project setup.

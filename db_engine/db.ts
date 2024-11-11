@@ -87,10 +87,10 @@ if (useSqliteInProd) {
 } else {
   query_all_tables = prod_query_all_tables;
 }
-// Query to list tables in SQLite database
+// Query to list tables in SQL database
 db.query(query_all_tables)
   .then((result) => {
-    const tables = result[0]; // SQLite query result is in the first element of the array
+    const tables = result[0]; // SQL query result is in the first element of the array
     logger.info("Tables in the database:", tables);
   })
   .catch((err) => {
